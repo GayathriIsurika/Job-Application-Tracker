@@ -1,7 +1,38 @@
 const jobList = document.getElementById("jobList");
 const jobForm = document.getElementById("jobForm");
+const themeToggle = document.getElementById("themeToggle");
 
 const API_URL = "http://localhost:3000/api/jobs";
+const THEME_STORAGE_KEY = "job-tracker-theme";
+
+function applyTheme(theme) {
+    const isDark = theme === "dark";
+    document.documentElement.dataset.theme = isDark ? "dark" : "light";
+    themeToggle.innerHTML = isDark ? "☀️ <span>Light mode</span>" : "🌙 <span>Dark mode</span>";
+    themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+}
+
+function loadTheme() {
+    try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        applyTheme(savedTheme === "dark" ? "dark" : "light");
+    } catch (error) {
+        console.error("Unable to load saved theme:", error);
+        applyTheme("light");
+    }
+}
+
+themeToggle.addEventListener("click", () => {
+    const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    applyTheme(theme);
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (error) {
+        console.error("Unable to save theme preference:", error);
+    }
+});
 
 function showError(message) {
     let error = jobList.querySelector(".job-error");
@@ -162,4 +193,5 @@ jobForm.addEventListener("submit", async (e) => {
     }
 });
 
+loadTheme();
 fetchJobs();

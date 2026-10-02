@@ -1,7 +1,7 @@
 const jobList = document.getElementById("jobList");
 const jobForm = document.getElementById("jobForm");
 
-const API_URL = "https://d07p0w7l-3000.inc1.devtunnels.ms/api/jobs";
+const API_URL = "http://localhost:3000/api/jobs";
 
 function showError(message) {
     let error = jobList.querySelector(".job-error");
@@ -71,6 +71,34 @@ function renderJob(job) {
         }
     });
 
+    // Favorite toggle
+    const favBtn = document.createElement("button");
+    favBtn.type = "button";
+    favBtn.className = "fav-btn";
+    favBtn.addEventListener("click", async () => {
+        favBtn.disabled = true;
+        try {
+            const res = await fetch(`${API_URL}/${job.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ favorite: !job.favorite }),
+            });
+            if (!res.ok) {
+                throw new Error(`Server returned ${res.status}`);
+            }
+            const updated = await res.json();
+            job.favorite = Boolean(updated.favorite);
+            updateFavoriteButton(favBtn, job.favorite);
+            clearError();
+        } catch (error) {
+            console.error("Unable to update favorite:", error);
+            showError("Could not update this favorite. Check the backend connection and try again.");
+        } finally {
+            favBtn.disabled = false;
+        }
+    });
+    updateFavoriteButton(favBtn, job.favorite);
+
     // Delete button
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑️";
@@ -91,12 +119,21 @@ function renderJob(job) {
     });
 
     controls.appendChild(statusInput);
+    controls.appendChild(favBtn);
     controls.appendChild(delBtn);
 
     item.appendChild(info);
     item.appendChild(controls);
 
     jobList.appendChild(item);
+}
+
+function updateFavoriteButton(button, isFavorite) {
+    button.textContent = isFavorite ? "★" : "☆";
+    button.classList.toggle("is-favorite", isFavorite);
+    button.setAttribute("aria-pressed", String(isFavorite));
+    button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
+    button.title = isFavorite ? "Remove from favorites" : "Add to favorites";
 }
 
 jobForm.addEventListener("submit", async (e) => {

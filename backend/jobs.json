@@ -4,34 +4,47 @@
     "company": "Linkedin",
     "role": "Frontend Engineer",
     "date": "2025-05-12",
-    "status": "Accepted"
+    "status": "Accepted",
+    "favorite": false
   },
   {
     "id": 1747686000003,
     "company": "GitHub",
     "role": "Developer Advocate",
     "date": "2025-05-17",
-    "status": "rejected"
+    "status": "rejected",
+    "favorite": false
   },
   {
     "id": 1747686000004,
     "company": "Shopify",
     "role": "Backend Engineer",
     "date": "2025-05-01",
-    "status": "offer"
+    "status": "offer",
+    "favorite": true
   },
   {
     "id": 1747686000005,
     "company": "Microsoft",
     "role": "Cloud Developer",
     "date": "2025-06-04",
-    "status": "new"
+    "status": "new",
+    "favorite": false
   },
   {
     "id": 1790867091555,
     "company": "Spotify ",
     "role": "PM",
     "date": "2026-10-01",
-    "status": "applied"
+    "status": "applied",
+    "favorite": false
+  },
+  {
+    "id": 1790950845337,
+    "company": "Creative Software ",
+    "role": "QA",
+    "date": "2026-10-06",
+    "status": "applied",
+    "favorite": false
   }
 ]
